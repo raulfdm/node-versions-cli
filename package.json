@@ -4,12 +4,15 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"type": "module",
 	"bin": {
 		"node-versions": "./bin/node-versions"
 	},
-	"files": ["dist", "bin"],
+	"files": [
+		"dist",
+		"bin"
+	],
 	"scripts": {
 		"prepare": "bun run build",
 		"dev": "bun run src/index.ts",
