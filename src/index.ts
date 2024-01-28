@@ -1,7 +1,6 @@
 import meow from "meow";
 import consola from "consola";
 import groupBy from "just-group-by";
-import { semver } from "bun";
 
 import { NodeVersions } from "./schema";
 
@@ -79,7 +78,7 @@ function showAllLts() {
 
 function logVersions(nodeVersions: NodeVersions) {
 	const ascendingVersions = nodeVersions.sort((a, b) =>
-		semver.order(a.version, b.version),
+		Bun.semver.order(a.version, b.version),
 	);
 
 	const result = ascendingVersions.reduce((acc, nodeVersion) => {

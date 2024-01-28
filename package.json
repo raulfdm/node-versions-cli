@@ -7,15 +7,14 @@
 	"version": "1.0.1",
 	"type": "module",
 	"bin": {
-		"node-versions": "./dist/node-versions"
+		"node-versions": "./bin/node-versions"
 	},
-	"files": [
-		"dist"
-	],
+	"files": ["dist", "bin"],
 	"scripts": {
 		"prepare": "bun run build",
 		"dev": "bun run src/index.ts",
-		"build": "bun build src/index.ts --compile --outfile dist/node-versions --target bun --minify"
+		"build:standalone-test": "bun build src/index.ts --compile --outfile dist/node-versions --target bun --minify",
+		"build": "bun build src/index.ts --outfile dist/node-versions.mjs --target node --minify"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.5.3",
