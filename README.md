@@ -1,15 +1,40 @@
-# node-versions
+# node-versions CLI
 
-To install dependencies:
+A simple CLI to easily check node versions
 
-```bash
-bun install
-```
+## Getting started
 
-To run:
+Install it globally:
 
 ```bash
-bun run index.ts
+npm add -g @raulmelo/node-versions
 ```
 
-This project was created using `bun init` in bun v1.0.25. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+Then run:
+
+```bash
+node-versions <flag>
+```
+
+## API
+
+```
+🌟 Node Versions CLI 🌟
+
+Usage:
+$ node-versions <flag>
+
+Options:
+--all         Show all versions
+--all-lts     Show all LTS versions
+--latest      Show latest version
+--latest-of   Show latest version of a specific version
+--lts         Show current LTS version
+
+Examples:
+$ node-versions --all
+$ node-versions --all-lts
+$ node-versions --latest
+$ node-versions --latest-of 20
+$ node-versions --lts
+```

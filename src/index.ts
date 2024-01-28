@@ -13,7 +13,7 @@ $ node-versions <flag>
 
 Options:
 --all		Show all versions
---all-lts		Show all LTS versions
+--all-lts	Show all LTS versions
 --latest	Show latest version
 --latest-of	Show latest version of a specific version
 --lts		Show current LTS version
