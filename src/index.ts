@@ -1,57 +1,39 @@
 import meow from "meow";
 import consola from "consola";
 import groupBy from "just-group-by";
+import { semver } from "bun";
 
 import { NodeVersions } from "./schema";
 
-const response = await fetch("https://nodejs.org/dist/index.json");
+const { flags, showHelp } = meow(
+	`🌟 Node Versions CLI 🌟
 
-const nodeVersionsJson = await response.json();
+Usage:
+$ node-versions <flag>
 
-const nodeVersions = NodeVersions.parse(nodeVersionsJson);
-
-const { flags } = meow(
-	`Usage
-$ node-versions <flags>
-
-Options
---lts   Show all LTS versions
---all   Show all versions
+Options:
+--lts		Show all LTS versions
+--all		Show all versions
+--latest	Show latest version
+--latest-of	Show latest version of a specific version
 
 Examples
-$ node-versions
-v21.1
-
+$ node-versions --latest
+$ node-versions --latest-of 20
 $ node-versions --lts
-v20.11.0
-v20.10.0
-v20.9.0
-v18.19.0
-v18.18.2
-...
-
 $ node-versions --all
-v21.6.1
-v21.6.0
-v21.5.0
-v21.4.0
-v21.3.0
-v21.2.0
-v21.1.0
-v21.0.0
-v20.11.0
-...
 `,
 	{
 		importMeta: import.meta,
 		flags: {
 			lts: {
 				type: "boolean",
-				default: false,
 			},
 			all: {
 				type: "boolean",
-				default: false,
+			},
+			latest: {
+				type: "boolean",
 			},
 			latestOf: {
 				type: "string",
@@ -60,15 +42,18 @@ v20.11.0
 	},
 );
 
+const nodeVersions = await getNodeVersions();
+
 if (flags.lts) {
 	showLts();
 } else if (flags.all) {
 	showAll();
 } else if (flags.latestOf) {
 	showLatestOf();
+} else if (flags.latest) {
+	showLatest();
 } else {
-	const [latestVersions] = nodeVersions;
-	logVersions([latestVersions]);
+	showHelp();
 }
 
 function showAll() {
@@ -83,7 +68,11 @@ function showLts() {
 }
 
 function logVersions(nodeVersions: NodeVersions) {
-	const result = nodeVersions.reduce((acc, nodeVersion) => {
+	const ascendingVersions = nodeVersions.sort((a, b) =>
+		semver.order(a.version, b.version),
+	);
+
+	const result = ascendingVersions.reduce((acc, nodeVersion) => {
 		return `${acc}${nodeVersion.version}\n`;
 	}, "");
 
@@ -110,4 +99,18 @@ function showLatestOf() {
 
 	consola.info(`Latest version of ${prependVersion}:`);
 	logVersions([latestVersion]);
+}
+
+function showLatest() {
+	const [latestVersions] = nodeVersions;
+	console.log("Latest version:");
+	logVersions([latestVersions]);
+}
+
+async function getNodeVersions() {
+	const response = await fetch("https://nodejs.org/dist/index.json");
+
+	const nodeVersionsJson = await response.json();
+
+	return NodeVersions.parse(nodeVersionsJson);
 }
