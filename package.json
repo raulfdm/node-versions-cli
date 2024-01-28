@@ -13,7 +13,7 @@
 	"scripts": {
 		"prepare": "bun run build",
 		"dev": "bun run src/index.ts",
-		"build": "bun build src/index.ts --compile --outfile dist/node-versions"
+		"build": "bun build src/index.ts --compile --outfile dist/node-versions --target bun --minify"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.5.3",
