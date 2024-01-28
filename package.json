@@ -1,6 +1,9 @@
 {
 	"name": "@raulfdm/node-versions",
 	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"version": "1.0.0",
 	"type": "module",
 	"bin": {
