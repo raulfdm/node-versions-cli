@@ -5,6 +5,7 @@
 	"bin": {
 		"node-versions": "./dist/node-versions"
 	},
+	"files": ["dist"],
 	"scripts": {
 		"prepare": "bun run build",
 		"dev": "bun run src/index.ts",
