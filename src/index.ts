@@ -1,5 +1,6 @@
 import meow from "meow";
 import consola from "consola";
+import groupBy from "just-group-by";
 
 import { NodeVersions } from "./schema";
 
@@ -52,6 +53,9 @@ v20.11.0
 				type: "boolean",
 				default: false,
 			},
+			latestOf: {
+				type: "string",
+			},
 		},
 	},
 );
@@ -60,6 +64,8 @@ if (flags.lts) {
 	showLts();
 } else if (flags.all) {
 	showAll();
+} else if (flags.latestOf) {
+	showLatestOf();
 } else {
 	const [latestVersions] = nodeVersions;
 	logVersions([latestVersions]);
@@ -78,8 +84,30 @@ function showLts() {
 
 function logVersions(nodeVersions: NodeVersions) {
 	const result = nodeVersions.reduce((acc, nodeVersion) => {
-		return `${acc}\n${nodeVersion.version}`;
+		return `${acc}${nodeVersion.version}\n`;
 	}, "");
 
 	consola.log(result);
+}
+
+function showLatestOf() {
+	const { latestOf } = flags;
+	const prependVersion = `v${latestOf}`;
+
+	const groupedVersions = groupBy(
+		nodeVersions,
+		(version) => version.version.split(".")[0],
+	);
+
+	const allVersionsOf = groupedVersions[prependVersion];
+
+	if (!allVersionsOf) {
+		consola.error(`No versions found for ${prependVersion}`);
+		return;
+	}
+
+	const [latestVersion] = allVersionsOf;
+
+	consola.info(`Latest version of ${prependVersion}:`);
+	logVersions([latestVersion]);
 }
