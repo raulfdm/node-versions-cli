@@ -1,17 +1,18 @@
 {
-  "name": "node-versions",
-  "type": "module",
-  "scripts": {
-    "dev": "bun run src/index.ts"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.5.3",
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "zod": "3.22.4"
-  }
+	"name": "node-versions",
+	"type": "module",
+	"scripts": {
+		"dev": "bun run src/index.ts",
+		"build": "bun build src/index.ts --compile --outfile dist/node-versions"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.5.3",
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	},
+	"dependencies": {
+		"zod": "3.22.4"
+	}
 }
