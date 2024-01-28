@@ -14,6 +14,10 @@ const { values: argValues } = parseArgs({
 			type: "boolean",
 			default: false,
 		},
+		latest: {
+			type: "boolean",
+			default: false,
+		},
 	},
 	strict: true,
 	allowPositionals: true,
@@ -21,6 +25,16 @@ const { values: argValues } = parseArgs({
 
 if (argValues.lts) {
 	showLts();
+} else if (argValues.latest) {
+	const [latestVersions] = nodeVersions;
+	logVersions([latestVersions]);
+} else {
+	showAll();
+}
+
+function showAll() {
+	console.log("All Versions:");
+	logVersions(nodeVersions);
 }
 
 function showLts() {
