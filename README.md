@@ -7,7 +7,7 @@ A simple CLI to easily check node versions
 Install it globally:
 
 ```bash
-npm add -g @raulmelo/node-versions
+npm add -g @raulfdm/node-versions
 ```
 
 Then run:

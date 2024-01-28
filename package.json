@@ -1,26 +1,26 @@
 {
-  "name": "node-versions",
-  "type": "module",
-  "bin": {
-    "node-versions": "./dist/node-versions"
-  },
-  "scripts": {
-    "prepare": "bun run build",
-    "dev": "bun run src/index.ts",
-    "build": "bun build src/index.ts --compile --outfile dist/node-versions"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.5.3",
-    "@changesets/cli": "2.27.1",
-    "@types/bun": "1.0.4"
-  },
-  "peerDependencies": {
-    "typescript": "5.3.3"
-  },
-  "dependencies": {
-    "consola": "3.2.3",
-    "just-group-by": "2.2.0",
-    "meow": "13.1.0",
-    "zod": "3.22.4"
-  }
+	"name": "@raulfdm/node-versions",
+	"type": "module",
+	"bin": {
+		"node-versions": "./dist/node-versions"
+	},
+	"scripts": {
+		"prepare": "bun run build",
+		"dev": "bun run src/index.ts",
+		"build": "bun build src/index.ts --compile --outfile dist/node-versions"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.5.3",
+		"@changesets/cli": "2.27.1",
+		"@types/bun": "1.0.4"
+	},
+	"peerDependencies": {
+		"typescript": "5.3.3"
+	},
+	"dependencies": {
+		"consola": "3.2.3",
+		"just-group-by": "2.2.0",
+		"meow": "13.1.0",
+		"zod": "3.22.4"
+	}
 }
