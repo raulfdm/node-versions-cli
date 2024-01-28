@@ -21,12 +21,10 @@
 		"@types/bun": "1.0.4"
 	},
 	"peerDependencies": {
-		"typescript": "5.3.3"
-	},
-	"dependencies": {
 		"consola": "3.2.3",
 		"just-group-by": "2.2.0",
 		"meow": "13.1.0",
+		"typescript": "5.3.3",
 		"zod": "3.22.4"
 	}
 }
