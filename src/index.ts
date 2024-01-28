@@ -12,16 +12,18 @@ Usage:
 $ node-versions <flag>
 
 Options:
---lts		Show all LTS versions
 --all		Show all versions
+--all-lts		Show all LTS versions
 --latest	Show latest version
 --latest-of	Show latest version of a specific version
+--lts		Show current LTS version
 
-Examples
+Examples:
+$ node-versions --all
+$ node-versions --all-lts
 $ node-versions --latest
 $ node-versions --latest-of 20
 $ node-versions --lts
-$ node-versions --all
 `,
 	{
 		importMeta: import.meta,
@@ -29,7 +31,7 @@ $ node-versions --all
 			lts: {
 				type: "boolean",
 			},
-			all: {
+			allLts: {
 				type: "boolean",
 			},
 			latest: {
@@ -48,6 +50,8 @@ if (flags.lts) {
 	showLts();
 } else if (flags.all) {
 	showAll();
+} else if (flags.allLts) {
+	showAllLts();
 } else if (flags.latestOf) {
 	showLatestOf();
 } else if (flags.latest) {
@@ -62,6 +66,12 @@ function showAll() {
 }
 
 function showLts() {
+	consola.info("Current LTS:");
+	const [currentLTS] = nodeVersions.filter((version) => version.lts);
+	logVersions([currentLTS]);
+}
+
+function showAllLts() {
 	consola.info("LTS Versions:");
 	const ltsVersions = nodeVersions.filter((version) => version.lts);
 	logVersions(ltsVersions);
@@ -76,7 +86,7 @@ function logVersions(nodeVersions: NodeVersions) {
 		return `${acc}${nodeVersion.version}\n`;
 	}, "");
 
-	consola.log(result);
+	consola.log(result.trim());
 }
 
 function showLatestOf() {
