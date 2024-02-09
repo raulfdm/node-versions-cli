@@ -1,7 +1,9 @@
 package api
 
 import (
-	"fmt"
+	"encoding/json"
+	"errors"
+	"io"
 	"net/http"
 	"node-versions-cli/data"
 )
@@ -9,16 +11,26 @@ import (
 const nodeVersionURL = "https://nodejs.org/dist/index.json"
 
 func GetNodeVersions() (*[]data.NodeVersion, error) {
-	body, err := http.Get(nodeVersionURL)
+	response, err := http.Get(nodeVersionURL)
 
 	if err != nil {
 		return nil, err
 	}
 
-	var nodeVersions []data.NodeVersion
+	if response.StatusCode == http.StatusOK {
+		var nodeVersions []data.NodeVersion
 
-	fmt.Printf("Body: %v\n", body)
-	// err = body.Decode(&nodeVersions)
+		bodyBi, error := io.ReadAll(response.Body)
 
-	return &nodeVersions, nil
+		if error != nil {
+			return nil, error
+		}
+
+		json.Unmarshal(bodyBi, &nodeVersions)
+
+		return &nodeVersions, nil
+	} else {
+		return nil, errors.New("error fetching node versions")
+	}
+
 }
