@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"node-versions-cli/api"
+)
 
 func main() {
-	fmt.Println("Hello, World!")
+	nodeVersions, _ := api.GetNodeVersions()
+
+	fmt.Println("Hello, World!", nodeVersions)
 }
