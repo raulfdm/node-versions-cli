@@ -14,4 +14,13 @@ type NodeVersion struct {
 	Security bool     `json:"security"`
 }
 
-type NodeVersions = []NodeVersion
+type NodeVersions []NodeVersion
+
+func (n NodeVersions) GetAll() []string {
+	var allVersions []string
+	for _, version := range n {
+		allVersions = append(allVersions, version.Version)
+	}
+
+	return allVersions
+}
