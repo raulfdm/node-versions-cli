@@ -1,34 +1,6 @@
 package data
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
-type Lts struct {
-	BoolValue   bool
-	StringValue string
-	IsBool      bool
-}
-
-func (lts Lts) UnmarshalJSON(data []byte) error {
-	var boolVal bool
-
-	if err := json.Unmarshal(data, &boolVal); err == nil {
-		lts.BoolValue = boolVal
-		lts.IsBool = true
-		return nil
-	}
-
-	var strVal string
-	if err := json.Unmarshal(data, &strVal); err == nil {
-		lts.StringValue = strVal
-		lts.IsBool = false
-		return nil
-	}
-
-	return fmt.Errorf("lts must be a boolean or a string")
-}
+type Lts interface{}
 
 type NodeVersion struct {
 	Version  string   `json:"version"`
@@ -44,10 +16,20 @@ type NodeVersion struct {
 	Security bool     `json:"security"`
 }
 
+func (n NodeVersion) IsLts() bool {
+	switch n.Lts.(type) {
+	case bool:
+		return false
+	default:
+		return true
+	}
+}
+
 type NodeVersions []NodeVersion
 
 func (n NodeVersions) GetAll() []string {
 	var allVersions []string
+
 	for _, version := range n {
 		allVersions = append(allVersions, version.Version)
 	}
@@ -67,11 +49,10 @@ func (n NodeVersions) GetCurrentLts() string {
 }
 
 func (n NodeVersions) GetAllLts() []string {
-	var ltsVersions []string
+	var ltsVersions []string = []string{}
 
 	for _, version := range n {
-
-		if !version.Lts.IsBool {
+		if version.IsLts() {
 			ltsVersions = append(ltsVersions, version.Version)
 		}
 	}
