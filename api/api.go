@@ -10,7 +10,7 @@ import (
 
 const nodeVersionURL = "https://nodejs.org/dist/index.json"
 
-func GetNodeVersions() (*[]data.NodeVersion, error) {
+func GetNodeVersions() (*data.NodeVersions, error) {
 	response, err := http.Get(nodeVersionURL)
 
 	if err != nil {
@@ -18,7 +18,7 @@ func GetNodeVersions() (*[]data.NodeVersion, error) {
 	}
 
 	if response.StatusCode == http.StatusOK {
-		var nodeVersions []data.NodeVersion
+		var nodeVersions data.NodeVersions
 
 		bodyBi, error := io.ReadAll(response.Body)
 
