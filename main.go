@@ -14,9 +14,14 @@ func main() {
 	var nodeVersions *data.NodeVersions
 
 	app := (&cli.App{
-		Name:                 "node-versions",
-		Version:              "2.0.0",
-		Description:          "A simple CLI to check node versions",
+		Name:  "node-versions",
+		Usage: "A simple CLI to check node versions",
+		UsageText: `node-versions all
+node-versions lts
+node-versions lts --all
+node-versions latest
+node-versions latest 14
+		`,
 		EnableBashCompletion: true,
 		Before: func(ctx *cli.Context) error {
 			// We don't want to call the API if there's no subcommand
@@ -76,16 +81,23 @@ func main() {
 			{
 				Name:  "latest",
 				Usage: "show latest version",
+				UsageText: `node-versions latest
+node-versions latest [major-version]`,
 				Action: func(ctx *cli.Context) error {
-					fmt.Println(nodeVersions.GetLatest())
+					if ctx.Args().Len() > 0 {
+						desiredMajorVersion := ctx.Args().First()
+						version, err := nodeVersions.GetLatestOf(desiredMajorVersion)
+
+						if err != nil {
+							return err
+						}
+
+						fmt.Println(*version)
+					} else {
+						fmt.Println(nodeVersions.GetLatest())
+					}
 
 					return nil
-				},
-				Flags: []cli.Flag{
-					&cli.StringFlag{
-						Name:  "of",
-						Usage: "show latest version of a specific version",
-					},
 				},
 			},
 		},
