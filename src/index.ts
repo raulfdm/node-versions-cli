@@ -48,7 +48,7 @@ const nodeVersions = await getNodeVersions();
 if (flags.lts) {
 	showLts();
 } else if (flags.all) {
-	showAll();
+	// showAll();
 } else if (flags.allLts) {
 	showAllLts();
 } else if (flags.latestOf) {
@@ -59,10 +59,10 @@ if (flags.lts) {
 	showHelp();
 }
 
-function showAll() {
-	consola.log("All Versions:");
-	logVersions(nodeVersions);
-}
+// function showAll() {
+// 	consola.log("All Versions:");
+// 	logVersions(nodeVersions);
+// }
 
 function showLts() {
 	consola.info("Current LTS:");
