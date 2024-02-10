@@ -3,20 +3,40 @@ package main
 import (
 	"fmt"
 	"log"
+	"node-versions-cli/api"
+	"node-versions-cli/data"
 	"os"
 
 	"github.com/urfave/cli/v2"
 )
 
 func main() {
+	var nodeVersions *data.NodeVersions
+
 	app := (&cli.App{
-		Name:        "node-versions",
-		Description: "A simple CLI to check node versions",
+		Name:                 "node-versions",
+		Version:              "2.0.0",
+		Description:          "A simple CLI to check node versions",
+		EnableBashCompletion: true,
+		Before: func(ctx *cli.Context) error {
+			// We don't want to call the API if there's no subcommand
+			if ctx.Args().Len() > 0 {
+				versions, err := api.GetNodeVersions()
+
+				if err != nil {
+					return err
+				}
+				nodeVersions = versions
+			}
+
+			return nil
+		},
 		Commands: []*cli.Command{{
 			Name:  "all",
 			Usage: "show all versions",
 			Action: func(cCtx *cli.Context) error {
-				fmt.Println("added task: ", cCtx.Args().First())
+
+				fmt.Println("hehee ", nodeVersions)
 				return nil
 			},
 		},
@@ -24,7 +44,6 @@ func main() {
 				Name:  "lts",
 				Usage: "show LTS version",
 				Action: func(cCtx *cli.Context) error {
-					fmt.Println("added task: ", cCtx.Args().First())
 					return nil
 				},
 				Flags: []cli.Flag{
@@ -48,12 +67,6 @@ func main() {
 					},
 				},
 			},
-		},
-		Action: func(cCtx *cli.Context) error {
-
-			cCtx.App.Command("help").Run(cCtx)
-
-			return nil
 		},
 	})
 
