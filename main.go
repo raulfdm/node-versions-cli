@@ -26,6 +26,7 @@ func main() {
 				if err != nil {
 					return err
 				}
+
 				nodeVersions = versions
 			}
 
@@ -36,7 +37,10 @@ func main() {
 			Usage: "show all versions",
 			Action: func(cCtx *cli.Context) error {
 
-				fmt.Println("hehee ", nodeVersions)
+				for _, version := range nodeVersions.GetAll() {
+					fmt.Println(version)
+				}
+
 				return nil
 			},
 		},
