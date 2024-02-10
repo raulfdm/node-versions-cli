@@ -12,40 +12,46 @@ func main() {
 	app := (&cli.App{
 		Name:        "node-versions",
 		Description: "A simple CLI to check node versions",
-		Commands:    []*cli.Command{},
-		// Flags: []cli.Flag{
-		// 	&cli.BoolFlag{
-		// 		Name:  "all",
-		// 		Usage: "show all node versions",
-		// 	},
-		// 	&cli.BoolFlag{
-		// 		Name:  "all-lts",
-		// 		Usage: "show all LTS versions",
-		// 	},
-		// 	&cli.BoolFlag{
-		// 		Name:  "lts",
-		// 		Usage: "show current LTS version",
-		// 	},
-		// 	&cli.BoolFlag{
-		// 		Name:  "latest",
-		// 		Usage: "show latest version",
-		// 	},
-		// 	&cli.StringFlag{
-		// 		Name:  "latest-of",
-		// 		Usage: "show latest version of a specific version",
-		// 	},
-		// },
+		Commands: []*cli.Command{{
+			Name:  "all",
+			Usage: "show all versions",
+			Action: func(cCtx *cli.Context) error {
+				fmt.Println("added task: ", cCtx.Args().First())
+				return nil
+			},
+		},
+			{
+				Name:  "lts",
+				Usage: "show LTS version",
+				Action: func(cCtx *cli.Context) error {
+					fmt.Println("added task: ", cCtx.Args().First())
+					return nil
+				},
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name:  "all",
+						Usage: "show all LTS versions",
+					},
+				},
+			},
+			{
+				Name:  "latest",
+				Usage: "show latest version",
+				Action: func(cCtx *cli.Context) error {
+					fmt.Println("added task: ", cCtx.Args().First())
+					return nil
+				},
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:  "of",
+						Usage: "show latest version of a specific version",
+					},
+				},
+			},
+		},
 		Action: func(cCtx *cli.Context) error {
-			name := "Nefertiti"
-			if cCtx.NArg() > 0 {
-				name = cCtx.Args().Get(0)
-			}
 
-			if cCtx.Bool("lts") {
-				fmt.Println("Hola", name)
-			} else {
-				cCtx.App.Command("help").Run(cCtx)
-			}
+			cCtx.App.Command("help").Run(cCtx)
 
 			return nil
 		},
