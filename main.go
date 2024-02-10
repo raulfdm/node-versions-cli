@@ -59,8 +59,9 @@ func main() {
 				},
 				Flags: []cli.Flag{
 					&cli.BoolFlag{
-						Name:  "all",
-						Usage: "show all LTS versions",
+						Name:    "all",
+						Usage:   "show all LTS versions",
+						Aliases: []string{"a"},
 						Action: func(ctx *cli.Context, value bool) error {
 
 							for _, version := range nodeVersions.GetAllLts() {
