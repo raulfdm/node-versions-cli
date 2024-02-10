@@ -35,7 +35,7 @@ func main() {
 		Commands: []*cli.Command{{
 			Name:  "all",
 			Usage: "show all versions",
-			Action: func(cCtx *cli.Context) error {
+			Action: func(ctx *cli.Context) error {
 
 				for _, version := range nodeVersions.GetAll() {
 					fmt.Println(version)
@@ -47,20 +47,35 @@ func main() {
 			{
 				Name:  "lts",
 				Usage: "show LTS version",
-				Action: func(cCtx *cli.Context) error {
+				Action: func(ctx *cli.Context) error {
+
+					// If we don't validate the flag, both Actions will be executed
+					// and overlap the output
+					if !ctx.Bool("all") {
+						fmt.Println(nodeVersions.GetCurrentLts())
+					}
+
 					return nil
 				},
 				Flags: []cli.Flag{
 					&cli.BoolFlag{
 						Name:  "all",
 						Usage: "show all LTS versions",
+						Action: func(ctx *cli.Context, value bool) error {
+
+							for _, version := range nodeVersions.GetAllLts() {
+								fmt.Println(version)
+							}
+
+							return nil
+						},
 					},
 				},
 			},
 			{
 				Name:  "latest",
 				Usage: "show latest version",
-				Action: func(cCtx *cli.Context) error {
+				Action: func(ctx *cli.Context) error {
 					fmt.Println(nodeVersions.GetLatest())
 
 					return nil
