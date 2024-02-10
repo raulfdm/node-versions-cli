@@ -61,7 +61,8 @@ func main() {
 				Name:  "latest",
 				Usage: "show latest version",
 				Action: func(cCtx *cli.Context) error {
-					fmt.Println("added task: ", cCtx.Args().First())
+					fmt.Println(nodeVersions.GetLatest())
+
 					return nil
 				},
 				Flags: []cli.Flag{

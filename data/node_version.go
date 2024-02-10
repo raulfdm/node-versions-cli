@@ -24,3 +24,7 @@ func (n NodeVersions) GetAll() []string {
 
 	return allVersions
 }
+
+func (n NodeVersions) GetLatest() string {
+	return n[0].Version
+}
