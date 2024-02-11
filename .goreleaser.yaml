@@ -44,3 +44,8 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+
+release:
+  github:
+    owner: raulfdm
+    name: node-versions-cli
