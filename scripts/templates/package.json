@@ -1,13 +1,19 @@
 {
 	"name": "@raulfdm/node-versions",
 	"private": false,
+	"bin": {
+		"node-versions": "./bin/node-versions"
+	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"version": "{{ .Version }}",
-	"files": ["bin"],
+	"scripts": {
+		"postinstall": "node install-manager.mjs install",
+		"preuninstall": "node install-manager.mjs uninstall"
+	},
 	"dependencies": {
-		"go-npm": "0.1.9"
+		"tar": "6.2.0"
 	},
 	"goBinary": {
 		"name": "node-versions",
