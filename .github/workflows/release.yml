@@ -27,6 +27,6 @@ jobs:
         run: go install github.com/goreleaser/goreleaser@latest
 
       - name: Release
-        run: goreleaser release --rm-dist
+        run: goreleaser release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
