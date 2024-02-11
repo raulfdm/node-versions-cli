@@ -1,0 +1,17 @@
+{
+	"name": "@raulfdm/node-versions",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"version": "{{ .Version }}",
+	"files": ["bin"],
+	"dependencies": {
+		"go-npm": "0.1.9"
+	},
+	"goBinary": {
+		"name": "node-versions",
+		"path": "./bin",
+		"url": "{{ .URL }}"
+	}
+}
