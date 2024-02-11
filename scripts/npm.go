@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -10,28 +11,35 @@ import (
 )
 
 func main() {
-	outdir, err := getDistFolderPath()
+	outDir, err := getDistFolderPath()
 
 	if err != nil {
 		fmt.Println("[ERROR] [getDistFolderPath] ", err)
 		return
 	}
 
-	err = createDistFolder(outdir)
+	meta, err := getReleaserMetaData()
+
+	if err != nil {
+		fmt.Println("[ERROR] [getReleaserMetaData] ", err)
+		return
+	}
+
+	err = createDistFolder(outDir)
 
 	if err != nil {
 		fmt.Println("[ERROR] [createDistFolder] ", err)
 		return
 	}
 
-	pkgString, err := getPackageJsonString()
+	pkgString, err := getPackageJsonString(*meta)
 
 	if err != nil {
 		fmt.Println("[ERROR] [getPackageJsonString] ", err)
 		return
 	}
 
-	err = writePackageJson(outdir, pkgString)
+	err = writePackageJson(outDir, pkgString)
 
 	if err != nil {
 		fmt.Println("[ERROR] [writePackageJson] ", err)
@@ -39,11 +47,6 @@ func main() {
 	}
 
 	fmt.Println("package.json created")
-}
-
-type Foo struct {
-	Version string
-	URL     string
 }
 
 func getDistFolderPath() (string, error) {
@@ -70,7 +73,12 @@ func createDistFolder(distPath string) error {
 	return nil
 }
 
-func getPackageJsonString() (string, error) {
+type PkgJsonTemplate struct {
+	Version string
+	URL     string
+}
+
+func getPackageJsonString(meta ReleaserMetaData) (string, error) {
 	temp, err := template.ParseFiles("./scripts/templates/package.json")
 
 	if err != nil {
@@ -79,8 +87,9 @@ func getPackageJsonString() (string, error) {
 
 	var buff bytes.Buffer
 
-	temp.Execute(&buff, Foo{Version: "2.0.0",
-		URL: `https://github.com/raulfdm/node-versions-cli/releases/download/v{{version}}/myGoPackage_{{version}}_{{platform}}_{{arch}}.tar.gz`,
+	temp.Execute(&buff, PkgJsonTemplate{
+		Version: meta.GetVersion(),
+		URL:     fmt.Sprintf("https://github.com/raulfdm/node-versions-cli/releases/download/v{{version}}/%s_{{version}}_{{platform}}_{{arch}}.tar.gz", meta.ProjectName),
 	})
 
 	result := buff.String()
@@ -103,4 +112,42 @@ func writePackageJson(distPath string, pkgString string) error {
 	}
 
 	return nil
+}
+
+type ReleaserMetaData struct {
+	Tag         string `json:"tag"`
+	ProjectName string `json:"project_name"`
+}
+
+func (r *ReleaserMetaData) GetVersion() string {
+	// remove v prefix
+	return r.Tag[1:]
+}
+
+func getReleaserMetaData() (*ReleaserMetaData, error) {
+	fullPath, err := filepath.Abs("./")
+
+	if err != nil {
+		return nil, err
+	}
+
+	releaserMetaPath := filepath.Join(fullPath, "dist/metadata.json")
+
+	file, err := os.Open(releaserMetaPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer file.Close()
+
+	var meta ReleaserMetaData
+
+	err = json.NewDecoder(file).Decode(&meta)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &meta, nil
 }
