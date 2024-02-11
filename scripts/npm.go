@@ -60,6 +60,8 @@ func main() {
 		return
 	}
 
+	fmt.Println("README.md copied")
+
 	err = copyFile(
 		"./scripts/templates/install-manager.mjs",
 		outDir,
@@ -71,7 +73,21 @@ func main() {
 		return
 	}
 
-	fmt.Println("README.md copied")
+	fmt.Println("install-manager.mjs copied")
+
+	err = copyFile(
+		"./scripts/templates/bin.mjs",
+		outDir,
+		"bin.mjs",
+	)
+
+	if err != nil {
+		fmt.Println("[ERROR] [copy bin.mjs] ", err)
+		return
+	}
+
+	fmt.Println("bin.mjs copied")
+
 }
 
 func getDistFolderPath() (string, error) {

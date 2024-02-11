@@ -2,7 +2,7 @@
 	"name": "@raulfdm/node-versions",
 	"private": false,
 	"bin": {
-		"node-versions": "./bin/node-versions"
+		"node-versions": "bin.mjs"
 	},
 	"publishConfig": {
 		"access": "public"
