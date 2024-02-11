@@ -1,0 +1,23 @@
+{
+	"name": "@raulfdm/node-versions",
+	"private": false,
+	"bin": {
+		"node-versions": "bin.mjs"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"version": "{{ .Version }}",
+	"scripts": {
+		"postinstall": "node install-manager.mjs install",
+		"preuninstall": "node install-manager.mjs uninstall"
+	},
+	"dependencies": {
+		"tar": "6.2.0"
+	},
+	"goBinary": {
+		"name": "node-versions",
+		"path": "./bin",
+		"url": "{{ .URL }}"
+	}
+}
