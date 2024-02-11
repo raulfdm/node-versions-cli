@@ -9,16 +9,17 @@
 	"bin": {
 		"node-versions": "./bin/node-versions"
 	},
-	"files": ["dist", "bin"],
-	"scripts": {
-		"dev": "bun run src/index.ts",
-		"build:standalone-test": "bun build src/index.ts --compile --outfile dist/node-versions --target bun --minify",
-		"build": "bun build src/index.ts --outfile dist/node-versions.mjs --target node --minify"
-	},
+	"files": ["dist"],
+	"scripts": {},
 	"devDependencies": {
-		"@changesets/cli": "2.27.1",
-		"execa": "8.0.1",
-		"typescript": "5.3.3",
-		"zod": "3.22.4"
+		"@changesets/cli": "2.27.1"
+	},
+	"dependencies": {
+		"go-npm": "0.1.9"
+	},
+	"goBinary": {
+		"name": "node-versions",
+		"path": "./dist",
+		"url": "https://github.com/raulfdm/node-versions-cli/releases/download/v{{version}}/myGoPackage_{{version}}_{{platform}}_{{arch}}.tar.gz"
 	}
 }
