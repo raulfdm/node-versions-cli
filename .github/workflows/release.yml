@@ -12,13 +12,11 @@ jobs:
   goreleaser:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      -
-        name: Set up Go
+      - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: 1.21.7
@@ -29,6 +27,21 @@ jobs:
           distribution: goreleaser
           version: latest
           args: release --clean
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        name: Setup Node
+        with:
+          node-version: 20
+
+      - name: Generate NPM files
+        run: |
+          go run ./scripts/npm.go
+
+      - name: Publish to NPM
+        run: |
+          cd dist-npm
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
