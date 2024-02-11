@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -47,6 +48,30 @@ func main() {
 	}
 
 	fmt.Println("package.json created")
+
+	err = copyFile(
+		"README.md",
+		outDir,
+		"README.md",
+	)
+
+	if err != nil {
+		fmt.Println("[ERROR] [copy README.md] ", err)
+		return
+	}
+
+	err = copyFile(
+		"./scripts/templates/go-npm.mjs",
+		outDir,
+		"go-npm.mjs",
+	)
+
+	if err != nil {
+		fmt.Println("[ERROR] [copy go-npm.mjs] ", err)
+		return
+	}
+
+	fmt.Println("README.md copied")
 }
 
 func getDistFolderPath() (string, error) {
@@ -89,7 +114,7 @@ func getPackageJsonString(meta ReleaserMetaData) (string, error) {
 
 	temp.Execute(&buff, PkgJsonTemplate{
 		Version: meta.GetVersion(),
-		URL:     fmt.Sprintf("https://github.com/raulfdm/node-versions-cli/releases/download/v{{version}}/%s_{{version}}_{{platform}}_{{arch}}.tar.gz", meta.ProjectName),
+		URL:     meta.GetRemoteUrl(),
 	})
 
 	result := buff.String()
@@ -124,6 +149,10 @@ func (r *ReleaserMetaData) GetVersion() string {
 	return r.Tag[1:]
 }
 
+func (r *ReleaserMetaData) GetRemoteUrl() string {
+	return fmt.Sprintf("https://github.com/raulfdm/node-versions-cli/releases/download/v{{version}}/%s_{{platform}}_{{arch}}.tar.gz", r.ProjectName)
+}
+
 func getReleaserMetaData() (*ReleaserMetaData, error) {
 	fullPath, err := filepath.Abs("./")
 
@@ -150,4 +179,39 @@ func getReleaserMetaData() (*ReleaserMetaData, error) {
 	}
 
 	return &meta, nil
+}
+
+func copyFile(relativeSrc string, outDir string, filename string) error {
+	fullPath, err := filepath.Abs("./")
+
+	if err != nil {
+		return err
+	}
+
+	readmeSrc := filepath.Join(fullPath, relativeSrc)
+	readmeDest := filepath.Join(outDir, filename)
+
+	srcFile, err := os.Open(readmeSrc)
+
+	if err != nil {
+		return err
+	}
+
+	defer srcFile.Close()
+
+	destFile, err := os.Create(readmeDest)
+
+	if err != nil {
+		return err
+	}
+
+	defer destFile.Close()
+
+	_, err = io.Copy(destFile, srcFile)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
