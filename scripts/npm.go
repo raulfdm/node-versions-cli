@@ -61,13 +61,13 @@ func main() {
 	}
 
 	err = copyFile(
-		"./scripts/templates/go-npm.mjs",
+		"./scripts/templates/install-manager.mjs",
 		outDir,
-		"go-npm.mjs",
+		"install-manager.mjs",
 	)
 
 	if err != nil {
-		fmt.Println("[ERROR] [copy go-npm.mjs] ", err)
+		fmt.Println("[ERROR] [copy install-manager.mjs] ", err)
 		return
 	}
 
